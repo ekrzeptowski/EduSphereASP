@@ -2,8 +2,9 @@
 using EduSphere.Application.TodoLists.Commands.DeleteTodoList;
 using EduSphere.Application.TodoLists.Commands.UpdateTodoList;
 using EduSphere.Application.TodoLists.Queries.GetTodos;
+using TodoAPI.Infrastructure;
 
-namespace EduSphere.Web.Endpoints;
+namespace TodoAPI.Endpoints;
 
 public class TodoLists : EndpointGroupBase
 {

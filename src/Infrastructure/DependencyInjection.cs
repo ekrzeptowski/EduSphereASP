@@ -3,6 +3,8 @@ using EduSphere.Domain.Constants;
 using EduSphere.Infrastructure.Data;
 using EduSphere.Infrastructure.Data.Interceptors;
 using EduSphere.Infrastructure.Identity;
+using EduSphere.Infrastructure.OptionsSetup;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -36,12 +38,24 @@ public static class DependencyInjection
             .AddDefaultIdentity<ApplicationUser>()
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
+        
+        services.ConfigureOptions<JwtOptionsSetup>();
+        services.ConfigureOptions<JwtBearerOptionsSetup>();
+        
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer();     
+
+        services.AddAuthorizationBuilder();
 
         services.AddSingleton(TimeProvider.System);
         services.AddTransient<IIdentityService, IdentityService>();
+        services.AddTransient<IAuthAccountService, AuthAccountService>();
+        services.AddTransient<IJwtProvider, JwtProvider>();
+        
+        
 
-        services.AddAuthorization(options =>
-            options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator)));
+        // services.AddAuthorization(options =>
+            // options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator)));
 
         return services;
     }

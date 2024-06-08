@@ -1,4 +1,5 @@
 using EduSphere.Infrastructure.Data;
+using TodoAPI.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,8 +9,6 @@ builder.Services.AddKeyVaultIfConfigured(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddWebServices();
-builder.Services.AddReverseProxy()
-    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
 var app = builder.Build();
 
@@ -26,40 +25,12 @@ else
 
 app.UseHealthChecks("/health");
 app.UseHttpsRedirection();
-app.UseStaticFiles();
 
-app.UseSwaggerUi(settings =>
-{
-    settings.Path = "/api";
-    settings.DocumentPath = "/api/specification.json";
-});
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller}/{action=Index}/{id?}");
-
-app.MapRazorPages();
-
-app.MapFallbackToFile("index.html");
-
-app.UseAuthentication();
-
-app.UseAuthorization();
-
-app.UseExceptionHandler(
-    new ExceptionHandlerOptions()
-    {
-        AllowStatusCode404Response = true, // important!
-        ExceptionHandlingPath = "/error"
-    });
+app.UseExceptionHandler(options => { });
 
 
 app.MapEndpoints();
 
-app.MapReverseProxy();
-
 app.Run();
 
-public partial class Program
-{
-}
+public partial class Program { }

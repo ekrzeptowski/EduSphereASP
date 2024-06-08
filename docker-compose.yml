@@ -28,6 +28,12 @@
     depends_on:
       mssql:
         condition: service_healthy
+  todoapi:
+    image: todoapi
+    build:
+      context: .
+      dockerfile: src/TodoAPI/Dockerfile
 
 volumes:
   mssql-data:
+
