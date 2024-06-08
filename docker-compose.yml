@@ -1,0 +1,33 @@
+﻿services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:latest
+    environment:
+      - SA_PASSWORD=123Pa$$word!
+      - ACCEPT_EULA=Y
+    volumes:
+      - mssql-data:/data/db
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "$$SA_PASSWORD" -Q
+        "SELECT 1" || exit 1
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+  web:
+    image: web
+    build:
+      context: .
+      dockerfile: src/Web/Dockerfile
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=mssql;Database=edusphere;User=sa;Password=123Pa$$word!;MultipleActiveResultSets=true;Encrypt=false
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8000
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+    ports:
+      - "8000:8000"
+    depends_on:
+      mssql:
+        condition: service_healthy
+
+volumes:
+  mssql-data:
