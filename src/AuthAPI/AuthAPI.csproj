@@ -14,22 +14,22 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj"/>
-    <ProjectReference Include="..\Web\Web.csproj"/>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore"/>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"/>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi"/>
     <PackageReference Include="NSwag.AspNetCore"/>
-    <PackageReference Include="NSwag.CodeGeneration"/>
-    <PackageReference Include="NSwag.CodeGeneration.CSharp"/>
-    <PackageReference Include="NSwag.CodeGeneration.TypeScript"/>
+    <PackageReference Include="NSwag.CodeGeneration" />
+    <PackageReference Include="NSwag.CodeGeneration.CSharp" />
+    <PackageReference Include="NSwag.CodeGeneration.TypeScript" />
     <PackageReference Include="NSwag.MSBuild">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CommonWeb\CommonWeb.csproj"/>
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj"/>
   </ItemGroup>
 
   <ItemGroup>

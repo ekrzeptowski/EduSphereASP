@@ -1,4 +1,6 @@
-﻿namespace EduSphere.Web.Infrastructure;
+﻿using Microsoft.AspNetCore.Builder;
+
+namespace CommonWeb.Infrastructure;
 
 public abstract class EndpointGroupBase
 {

@@ -1,3 +1,2 @@
-global using Ardalis.GuardClauses;
-global using EduSphere.TodoAPI.Infrastructure;
+global using CommonWeb.Infrastructure;
 global using MediatR;

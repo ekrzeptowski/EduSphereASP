@@ -3,7 +3,7 @@
   "defaultVariables": null,
   "documentGenerator": {
     "aspNetCoreToOpenApi": {
-      "project": "Web.csproj",
+      "project": "TodoAPI.csproj",
       "msBuildProjectExtensionsPath": null,
       "configuration": null,
       "runtime": null,
@@ -34,7 +34,7 @@
       "serviceHost": null,
       "serviceBasePath": null,
       "serviceSchemes": [],
-      "infoTitle": "EduSphere API",
+      "infoTitle": "EduSphere TodoAPI",
       "infoDescription": null,
       "infoVersion": "1.0.0",
       "documentTemplate": null,
@@ -51,7 +51,7 @@
       "startupType": null,
       "allowNullableBodyParameters": true,
       "useHttpAttributeNameAsOperationId": false,
-      "output": "wwwroot/api/specification.json",
+      "output": "wwwroot/api/TodoApi/specification.json",
       "outputType": "OpenApi3",
       "newLineBehavior": "Auto",
       "assemblyPaths": [],
@@ -121,7 +121,7 @@
       "enumNameGeneratorType": null,
       "serviceHost": null,
       "serviceSchemes": null,
-      "output": "ClientApp/src/web-api-client.ts",
+      "output": "../Web/ClientApp/src/web-todoapi-client.ts",
       "newLineBehavior": "Auto"
     }
   }

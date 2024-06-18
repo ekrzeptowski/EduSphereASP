@@ -1,12 +1,13 @@
 ﻿using EduSphere.Application.Features.Identity.Accounts.Commands;
 
-namespace EduSphere.Web.Endpoints;
+namespace AuthAPI.Endpoints;
 
 public class AuthEndpoints : EndpointGroupBase
 {
     public override void Map(WebApplication app)
     {
-        app.MapGroup("api/auth")
+        app.MapGroup("/api/auth")
+            .WithTags(this.GetType().Name)
             .AllowAnonymous()
             .MapPost(Login);
     }

@@ -1,8 +1,9 @@
 ﻿using EduSphere.Application.Common.Exceptions;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EduSphere.TodoAPI.Infrastructure;
+namespace CommonWeb.Infrastructure;
 
 public class CustomExceptionHandler : IExceptionHandler
 {

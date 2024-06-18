@@ -2,7 +2,7 @@
   mssql:
     image: mcr.microsoft.com/mssql/server:latest
     environment:
-      - SA_PASSWORD=123Pa$$word!
+      - SA_PASSWORD=${SA_PASSWORD}
       - ACCEPT_EULA=Y
     volumes:
       - mssql-data:/data/db
@@ -13,27 +13,37 @@
       timeout: 3s
       retries: 10
       start_period: 10s
-  web:
-    image: web
+  
+  authapi:
+    image: authapi
     build:
       context: .
-      dockerfile: src/Web/Dockerfile
-    environment:
-      - ConnectionStrings__DefaultConnection=Server=mssql;Database=edusphere;User=sa;Password=123Pa$$word!;MultipleActiveResultSets=true;Encrypt=false
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:8000
-      - DOTNET_USE_POLLING_FILE_WATCHER=1
-    ports:
-      - "8000:8000"
-    depends_on:
-      mssql:
-        condition: service_healthy
+      dockerfile: src/AuthAPI/Dockerfile
+
   todoapi:
     image: todoapi
     build:
       context: .
       dockerfile: src/TodoAPI/Dockerfile
 
+  web:
+    image: web
+    build:
+      context: .
+      dockerfile: src/Web/Dockerfile
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=mssql;Database=${DB_DATABASE};User=sa;Password=${SA_PASSWORD};MultipleActiveResultSets=true;Encrypt=false
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8000
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+    ports:
+      - "8000:8000"
+    depends_on:
+      - authapi
+      - todoapi
+      - mssql:
+        condition: service_healthy
+
+
 volumes:
   mssql-data:
-

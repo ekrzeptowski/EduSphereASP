@@ -1,8 +1,8 @@
 ﻿using System.Security.Claims;
-
 using EduSphere.Application.Common.Interfaces;
+using Microsoft.AspNetCore.Http;
 
-namespace EduSphere.Web.Services;
+namespace CommonWeb.Services;
 
 public class CurrentUser : IUser
 {

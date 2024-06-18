@@ -1,15 +1,22 @@
+using CommonWeb;
 using EduSphere.Infrastructure.Data;
+using EduSphere.Web;
+using Microsoft.Extensions.Options;
+using NSwag.AspNetCore;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Yarp.ReverseProxy.Swagger;
+using Yarp.ReverseProxy.Swagger.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var reverseProxyConfig = builder.Configuration.GetSection("ReverseProxy");
 // Add services to the container.
-builder.Services.AddKeyVaultIfConfigured(builder.Configuration);
-
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
-builder.Services.AddWebServices();
+builder.Services.AddWebServices("Web gateway");
 builder.Services.AddReverseProxy()
-    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
+    .LoadFromConfig(reverseProxyConfig)
+    .AddSwagger(reverseProxyConfig);
+builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 
 var app = builder.Build();
 
@@ -30,8 +37,15 @@ app.UseStaticFiles();
 
 app.UseSwaggerUi(settings =>
 {
+    var config = app.Services.GetRequiredService<IOptionsMonitor<ReverseProxyDocumentFilterConfig>>().CurrentValue;
+    foreach (var cluster in config.Clusters)
+    {
+        Console.WriteLine($"Adding Swagger UI for {cluster.Key}");
+        settings.SwaggerRoutes.Add(new SwaggerUiRoute($"/api/{cluster.Key}", $"/api/{cluster.Key}/specification.json"));
+    }
+
     settings.Path = "/api";
-    settings.DocumentPath = "/api/specification.json";
+    settings.DocumentPath = "/api/{documentName}/specification.json";
 });
 
 app.MapControllerRoute(
@@ -52,9 +66,6 @@ app.UseExceptionHandler(
         AllowStatusCode404Response = true, // important!
         ExceptionHandlingPath = "/error"
     });
-
-
-app.MapEndpoints();
 
 app.MapReverseProxy();
 

@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace EduSphere.Web.Infrastructure;
+namespace CommonWeb.Infrastructure;
 
 public static class MethodInfoExtensions
 {

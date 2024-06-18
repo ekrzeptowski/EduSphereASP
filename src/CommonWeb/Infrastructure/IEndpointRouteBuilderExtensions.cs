@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
 
-namespace EduSphere.Web.Infrastructure;
+namespace CommonWeb.Infrastructure;
 
 public static class IEndpointRouteBuilderExtensions
 {

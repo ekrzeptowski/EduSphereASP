@@ -4,7 +4,6 @@ using EduSphere.Application.TodoItems.Commands.DeleteTodoItem;
 using EduSphere.Application.TodoItems.Commands.UpdateTodoItem;
 using EduSphere.Application.TodoItems.Commands.UpdateTodoItemDetail;
 using EduSphere.Application.TodoItems.Queries.GetTodoItemsWithPagination;
-using TodoAPI.Infrastructure;
 
 namespace TodoAPI.Endpoints;
 

@@ -1,14 +1,13 @@
+using CommonWeb;
+using CommonWeb.Infrastructure;
 using EduSphere.Infrastructure.Data;
-using TodoAPI.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddKeyVaultIfConfigured(builder.Configuration);
-
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
-builder.Services.AddWebServices();
+builder.Services.AddWebServices("TodoAPI");
 
 var app = builder.Build();
 
@@ -16,6 +15,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     await app.InitialiseDatabaseAsync();
+    app.UseSwaggerUi(settings =>
+    {
+        settings.Path = "/api";
+        settings.DocumentPath = "/api/TodoApi/specification.json";
+    });
 }
 else
 {
@@ -25,6 +29,7 @@ else
 
 app.UseHealthChecks("/health");
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 
 app.UseExceptionHandler(options => { });
 
@@ -33,4 +38,6 @@ app.MapEndpoints();
 
 app.Run();
 
-public partial class Program { }
+public partial class Program
+{
+}
