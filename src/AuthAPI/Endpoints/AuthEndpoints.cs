@@ -9,10 +9,16 @@ public class AuthEndpoints : EndpointGroupBase
         app.MapGroup("/api/auth")
             .WithTags(this.GetType().Name)
             .AllowAnonymous()
-            .MapPost(Login);
+            .MapPost(Login, "/login")
+            .MapPost(Register, "/register");
     }
 
     public async Task<string> Login(ISender sender, LoginRequestCommand command)
+    {
+        return await sender.Send(command);
+    }
+    
+    public async Task<string> Register(ISender sender, RegisterRequestCommand command)
     {
         return await sender.Send(command);
     }

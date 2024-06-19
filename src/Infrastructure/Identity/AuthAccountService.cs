@@ -4,6 +4,7 @@ using EduSphere.Application.Constants;
 using Microsoft.AspNetCore.Identity;
 
 namespace EduSphere.Infrastructure.Identity;
+
 internal class AuthAccountService : IAuthAccountService
 {
     private readonly UserManager<ApplicationUser> _userManager;
@@ -14,6 +15,7 @@ internal class AuthAccountService : IAuthAccountService
         _userManager = userManager;
         _jwtProvider = jwtProvider;
     }
+
     public Task<(Result Result, string UserId)> ForgotPassword(string email)
     {
         throw new NotImplementedException();
@@ -38,6 +40,22 @@ internal class AuthAccountService : IAuthAccountService
         return !string.IsNullOrEmpty(token)
             ? (Result.Success(), token)
             : (Result.Failure(new List<string> { CommonMessage.WRONG_USERNAME_PASSWORD }), token);
+    }
+
+    public async Task<Result> Register(string email, string password)
+    {
+        // check if user already exists
+        var user = await _userManager.FindByEmailAsync(email)
+                   ?? await _userManager.FindByNameAsync(email);
+        if (user != null)
+        {
+            return (Result.Failure(new List<string> { CommonMessage.USER_ALREADY_EXISTS }));
+        }
+
+        var result = await _userManager.CreateAsync(new ApplicationUser { UserName = email, Email = email }, password);
+        return !result.Succeeded
+            ? (Result.Failure(result.ToApplicationResult().Errors))
+            : (Result.Success());
     }
 
     public Task<(Result Result, string UserId)> ResetPassword(string email)
