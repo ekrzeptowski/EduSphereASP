@@ -1,6 +1,7 @@
 import {Counter} from "./components/Counter";
 import {Home} from "./components/Home";
 import {LoginPage} from "./pages/Login";
+import {RegisterPage} from "./pages/Register";
 
 const AppRoutes = [
   {
@@ -14,6 +15,10 @@ const AppRoutes = [
   {
     path: '/login',
     element: <LoginPage/>
+  },
+  {
+    path: '/register',
+    element: <RegisterPage/>
   }
 ];
 
