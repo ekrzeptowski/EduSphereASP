@@ -1,5 +1,6 @@
 using CommonWeb;
 using CommonWeb.Infrastructure;
+using EduSphere.Infrastructure;
 using EduSphere.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);

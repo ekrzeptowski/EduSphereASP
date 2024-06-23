@@ -25,6 +25,12 @@
     build:
       context: .
       dockerfile: src/TodoAPI/Dockerfile
+      
+  eduapi:
+    image: eduapi
+    build:
+      context: .
+      dockerfile: src/EduAPI/Dockerfile
 
   web:
     image: web

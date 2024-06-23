@@ -3,6 +3,8 @@ using System.Runtime.CompilerServices;
 using AutoMapper;
 using EduSphere.Application.Common.Interfaces;
 using EduSphere.Application.Common.Models;
+using EduSphere.Application.Features.Course.Queries;
+using EduSphere.Application.Features.Lesson.Queries;
 using EduSphere.Application.TodoItems.Queries.GetTodoItemsWithPagination;
 using EduSphere.Application.TodoLists.Queries.GetTodos;
 using EduSphere.Domain.Entities;
@@ -17,7 +19,7 @@ public class MappingTests
 
     public MappingTests()
     {
-        _configuration = new MapperConfiguration(config => 
+        _configuration = new MapperConfiguration(config =>
             config.AddMaps(Assembly.GetAssembly(typeof(IApplicationDbContext))));
 
         _mapper = _configuration.CreateMapper();
@@ -35,6 +37,8 @@ public class MappingTests
     [TestCase(typeof(TodoList), typeof(LookupDto))]
     [TestCase(typeof(TodoItem), typeof(LookupDto))]
     [TestCase(typeof(TodoItem), typeof(TodoItemBriefDto))]
+    [TestCase(typeof(Course), typeof(CourseDto))]
+    [TestCase(typeof(Lesson), typeof(LessonDto))]
     public void ShouldSupportMappingFromSourceToDestination(Type source, Type destination)
     {
         var instance = GetInstanceOf(source);

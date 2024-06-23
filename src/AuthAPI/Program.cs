@@ -1,6 +1,6 @@
 using CommonWeb;
+using EduSphere.Infrastructure;
 using EduSphere.Infrastructure.Data;
-using NSwag.Generation;
 using NSwag.Generation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -44,3 +44,7 @@ app.UseExceptionHandler(
 app.MapEndpoints();
 
 app.Run();
+
+public partial class Program
+{
+}

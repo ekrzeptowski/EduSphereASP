@@ -1,8 +1,8 @@
 using EduSphere.Application.Common.Interfaces;
 using EduSphere.Application.Common.Models;
+using EduSphere.Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace EduSphere.Infrastructure.Identity;
 

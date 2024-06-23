@@ -1,5 +1,5 @@
 ﻿using EduSphere.Application.Common.Interfaces;
-using EduSphere.Domain.Constants;
+using EduSphere.Domain;
 using EduSphere.Infrastructure.Data;
 using EduSphere.Infrastructure.Data.Interceptors;
 using EduSphere.Infrastructure.Identity;
@@ -9,8 +9,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace Microsoft.Extensions.DependencyInjection;
+namespace EduSphere.Infrastructure;
 
 public static class DependencyInjection
 {
@@ -52,11 +53,6 @@ public static class DependencyInjection
         services.AddTransient<IAuthAccountService, AuthAccountService>();
         services.AddTransient<IJwtProvider, JwtProvider>();
         
-        
-
-        // services.AddAuthorization(options =>
-            // options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator)));
-
         return services;
     }
 }
