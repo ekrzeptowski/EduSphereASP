@@ -53,10 +53,12 @@ internal class AuthAccountService : IAuthAccountService
             return (Result.Failure(new List<string> { CommonMessage.USER_ALREADY_EXISTS }));
         }
 
-        var result = await _userManager.CreateAsync(new ApplicationUser { UserName = email, Email = email }, password);
+        var newUser = new ApplicationUser { UserName = email, Email = email };
+
+        var result = await _userManager.CreateAsync(newUser, password);
         return !result.Succeeded
             ? (Result.Failure(result.ToApplicationResult().Errors))
-            : (Result.Success());
+            : (Result.Success(newUser.Id));
     }
 
     public Task<(Result Result, string UserId)> ResetPassword(string email)

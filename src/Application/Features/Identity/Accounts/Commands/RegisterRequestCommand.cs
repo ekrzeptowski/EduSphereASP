@@ -25,6 +25,6 @@ internal sealed class RegisterRequestCommandHandler : IRequestHandler<RegisterRe
             }
         }
 
-        return "Użytkownik został zarejestrowany";
+        return result.Data;
     }
 }

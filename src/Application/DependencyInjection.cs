@@ -1,7 +1,8 @@
 ﻿using System.Reflection;
 using EduSphere.Application.Common.Behaviours;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace Microsoft.Extensions.DependencyInjection;
+namespace EduSphere.Application;
 
 public static class DependencyInjection
 {
