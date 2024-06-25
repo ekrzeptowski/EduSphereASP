@@ -13,6 +13,8 @@ public class Courses : EndpointGroupBase
             .RequireAuthorization()
             .MapGet(GetCoursesWithPagination)
             .MapGet(GetCourse, "{courseId}")
+            .MapDelete(DeleteCourse, "{courseId}")
+            .MapPut(UpdateCourse, "{courseId}")
             .MapPost(CreateCourse);
     }
 
@@ -30,5 +32,17 @@ public class Courses : EndpointGroupBase
     public async Task<int> CreateCourse(ISender sender, CreateCourseCommand createCourseCommand)
     {
         return await sender.Send(createCourseCommand);
+    }
+
+    public async Task<IResult> DeleteCourse(ISender sender, int courseId)
+    {
+        await sender.Send(new DeleteCourseCommand(courseId));
+        return Results.NoContent();
+    }
+    
+    public async Task<IResult> UpdateCourse(ISender sender, UpdateCourseCommand updateCourseCommand, string courseId)
+    {
+        await sender.Send(updateCourseCommand);
+        return Results.NoContent();
     }
 }

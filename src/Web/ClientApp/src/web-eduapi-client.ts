@@ -140,6 +140,78 @@ export class CoursesClient {
         }
         return Promise.resolve<CourseDto>(null as any);
     }
+
+    deleteCourse(courseId: number): Promise<void> {
+        let url_ = this.baseUrl + "/api/course/{courseId}";
+        if (courseId === undefined || courseId === null)
+            throw new Error("The parameter 'courseId' must be defined.");
+        url_ = url_.replace("{courseId}", encodeURIComponent("" + courseId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteCourse(_response);
+        });
+    }
+
+    protected processDeleteCourse(response: Response): Promise<void> {
+        followIfLoginRedirect(response);
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    updateCourse(courseId: string, updateCourseCommand: UpdateCourseCommand): Promise<void> {
+        let url_ = this.baseUrl + "/api/course/{courseId}";
+        if (courseId === undefined || courseId === null)
+            throw new Error("The parameter 'courseId' must be defined.");
+        url_ = url_.replace("{courseId}", encodeURIComponent("" + courseId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(updateCourseCommand);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateCourse(_response);
+        });
+    }
+
+    protected processUpdateCourse(response: Response): Promise<void> {
+        followIfLoginRedirect(response);
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
 }
 
 export class EnrollmentsClient {
@@ -315,6 +387,78 @@ export class LessonsClient {
             });
         }
         return Promise.resolve<LessonDto>(null as any);
+    }
+
+    deleteLesson(lessonId: number): Promise<void> {
+        let url_ = this.baseUrl + "/api/lesson/{lessonId}";
+        if (lessonId === undefined || lessonId === null)
+            throw new Error("The parameter 'lessonId' must be defined.");
+        url_ = url_.replace("{lessonId}", encodeURIComponent("" + lessonId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: RequestInit = {
+            method: "DELETE",
+            headers: {
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDeleteLesson(_response);
+        });
+    }
+
+    protected processDeleteLesson(response: Response): Promise<void> {
+        followIfLoginRedirect(response);
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
+    }
+
+    updateLesson(lessonId: number, command: UpdateLessonCommand): Promise<void> {
+        let url_ = this.baseUrl + "/api/lesson/{lessonId}";
+        if (lessonId === undefined || lessonId === null)
+            throw new Error("The parameter 'lessonId' must be defined.");
+        url_ = url_.replace("{lessonId}", encodeURIComponent("" + lessonId));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processUpdateLesson(_response);
+        });
+    }
+
+    protected processUpdateLesson(response: Response): Promise<void> {
+        followIfLoginRedirect(response);
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            return;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<void>(null as any);
     }
 
     createLesson(command: CreateLessonCommand): Promise<number> {
@@ -526,6 +670,50 @@ export interface ILessonDto {
     content?: string | undefined;
 }
 
+export class UpdateCourseCommand implements IUpdateCourseCommand {
+    courseId?: number;
+    title?: string;
+    description?: string;
+
+    constructor(data?: IUpdateCourseCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.courseId = _data["courseId"];
+            this.title = _data["title"];
+            this.description = _data["description"];
+        }
+    }
+
+    static fromJS(data: any): UpdateCourseCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateCourseCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["courseId"] = this.courseId;
+        data["title"] = this.title;
+        data["description"] = this.description;
+        return data;
+    }
+}
+
+export interface IUpdateCourseCommand {
+    courseId?: number;
+    title?: string;
+    description?: string;
+}
+
 export class CreateCourseCommand implements ICreateCourseCommand {
     title?: string;
     description?: string;
@@ -648,6 +836,50 @@ export class CreateEnrollmentCommand implements ICreateEnrollmentCommand {
 export interface ICreateEnrollmentCommand {
     studentId?: string;
     courseId?: number;
+}
+
+export class UpdateLessonCommand implements IUpdateLessonCommand {
+    lessonId?: number;
+    title?: string;
+    content?: string;
+
+    constructor(data?: IUpdateLessonCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.lessonId = _data["lessonId"];
+            this.title = _data["title"];
+            this.content = _data["content"];
+        }
+    }
+
+    static fromJS(data: any): UpdateLessonCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateLessonCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["lessonId"] = this.lessonId;
+        data["title"] = this.title;
+        data["content"] = this.content;
+        return data;
+    }
+}
+
+export interface IUpdateLessonCommand {
+    lessonId?: number;
+    title?: string;
+    content?: string;
 }
 
 export class CreateLessonCommand implements ICreateLessonCommand {
