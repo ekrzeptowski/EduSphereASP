@@ -10,7 +10,7 @@ const AuthProvider = ({children}) => {
   const navigate = useNavigate();
 
   const login = (newToken) => {
-    setToken({token: newToken});
+    setToken(newToken);
     navigate("/", {replace: true});
   };
 
@@ -19,7 +19,7 @@ const AuthProvider = ({children}) => {
     navigate("/", {replace: true});
   }
 
-  const user = token?.token && jwtDecode(token.token);
+  const user = token && jwtDecode(token);
 
   const contextValue = useMemo(
     () => ({
