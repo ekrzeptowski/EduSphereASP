@@ -38,12 +38,14 @@ public class GetCourseQueryHandler : IRequestHandler<GetCourseQuery, CourseDto>
         // Get the current userId from the ClaimsPrincipal
         var userId = _httpContextAccessor.HttpContext?.User.Claims
             .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        
+        var isTeacher = _httpContextAccessor.HttpContext?.User.IsInRole("Teacher") ?? false;
 
         // Check if the current user is enrolled in the course
         var isEnrolled = await _context.Enrollments
             .AnyAsync(e => e.Student.Id == userId && e.Course.Id == course.Id, cancellationToken);
 
-        if (!isEnrolled)
+        if (!isEnrolled && !isTeacher)
         {
             // If the user is not enrolled, return a course with no lessons
             return new CourseDto
