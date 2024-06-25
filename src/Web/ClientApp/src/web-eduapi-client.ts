@@ -316,6 +316,46 @@ export class LessonsClient {
         }
         return Promise.resolve<LessonDto>(null as any);
     }
+
+    createLesson(command: CreateLessonCommand): Promise<number> {
+        let url_ = this.baseUrl + "/api/lesson";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processCreateLesson(_response);
+        });
+    }
+
+    protected processCreateLesson(response: Response): Promise<number> {
+        followIfLoginRedirect(response);
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<number>(null as any);
+    }
 }
 
 export class PaginatedListOfCourseDto implements IPaginatedListOfCourseDto {
@@ -607,6 +647,50 @@ export class CreateEnrollmentCommand implements ICreateEnrollmentCommand {
 
 export interface ICreateEnrollmentCommand {
     studentId?: string;
+    courseId?: number;
+}
+
+export class CreateLessonCommand implements ICreateLessonCommand {
+    title?: string;
+    content?: string;
+    courseId?: number;
+
+    constructor(data?: ICreateLessonCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.title = _data["title"];
+            this.content = _data["content"];
+            this.courseId = _data["courseId"];
+        }
+    }
+
+    static fromJS(data: any): CreateLessonCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateLessonCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        data["content"] = this.content;
+        data["courseId"] = this.courseId;
+        return data;
+    }
+}
+
+export interface ICreateLessonCommand {
+    title?: string;
+    content?: string;
     courseId?: number;
 }
 
