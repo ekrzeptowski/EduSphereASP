@@ -36,7 +36,7 @@ internal sealed class JwtProvider : IJwtProvider
 
         var roles = await _userManager.GetRolesAsync(user!);
 
-        var userRoles = roles.Select(r => new Claim(ClaimTypes.Role, r )).ToArray();
+        var userRoles = roles.Select(r => new Claim("role", r )).ToArray();
 
         var roleClaims = new List<Claim>();
         foreach (var role in roles)
