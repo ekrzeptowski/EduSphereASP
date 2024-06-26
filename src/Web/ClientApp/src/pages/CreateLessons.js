@@ -1,4 +1,4 @@
-﻿import {useState} from "react";
+﻿import {useEffect, useState} from "react";
 import {LessonsClient} from "../web-eduapi-client.ts";
 import {useAuth} from "../Auth";
 import {Button, Form, Input, Label} from "reactstrap";
@@ -8,7 +8,7 @@ export const CreateLessonPage = () => {
   const {token} = useAuth();
   const navigate = useNavigate();
 
-  const {courseId} = useParams();
+  const {courseId, lessonId} = useParams();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [error, setError] = useState(null);
@@ -20,8 +20,31 @@ export const CreateLessonPage = () => {
     })
   });
 
+  const defaultData = async () => {
+    if (!lessonId) {
+      return;
+    }
+    const lesson = await lessonsClient.getLesson(lessonId);
+    setTitle(lesson.title);
+    setContent(lesson.content);
+  }
+
+  useEffect(() => {
+    defaultData();
+  }, []);
+
   const createLesson = async () => {
     try {
+      if (lessonId) {
+        await lessonsClient.updateLesson(parseInt(lessonId, 10), {
+          title,
+          content,
+          courseId,
+          lessonId: parseInt(lessonId, 10)
+        });
+        navigate("/courses/" + courseId);
+        return;
+      }
       await lessonsClient.createLesson({title, content, courseId});
       navigate("/courses/" + courseId);
     } catch (e) {
@@ -32,8 +55,8 @@ export const CreateLessonPage = () => {
   return (
     <div>
       <Link to={`/courses/${courseId}`}>Powrót</Link>
-      <h1>Stwórz lekcję</h1>
-      <p>Tutaj możesz stworzyć nową lekcję.</p>
+      <h1>{lessonId ? "Edytuj" : "Stwórz"} lekcję</h1>
+      <p>Tutaj możesz {lessonId ? "edytować istniejącą" : "stworzyćnową "} lekcję.</p>
       <Form>
         <Label for="title">Tytuł:</Label>
         <Input type="text" id="title" value={title} required onChange={e => {
@@ -45,7 +68,7 @@ export const CreateLessonPage = () => {
           setError(null)
           setContent(e.target.value)
         }}/>
-        <Button className="mt-2" onClick={createLesson}>Stwórz lekcję</Button>
+        <Button className="mt-2" onClick={createLesson}>{lessonId ? "Zapisz" : "Stwórz"} lekcję</Button>
       </Form>
       {error && <p className="text-danger">
         {Object.entries(error).map(([key, value]) => <div key={key}>{value}</div>)}

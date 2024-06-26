@@ -6,6 +6,7 @@ import {CoursesPage} from "./pages/Courses";
 import {LessonsPage} from "./pages/Lessons";
 import {CreateCoursePage} from "./pages/CreateCourse";
 import {CreateLessonPage} from "./pages/CreateLessons";
+import {DeleteLessonPage} from "./pages/DeleteLesson";
 
 const AppRoutes = [
   {
@@ -44,6 +45,18 @@ const AppRoutes = [
       <CreateLessonPage/>
     </ProtectedRoute>
   },
+  {
+    path: '/courses/:courseId/lessons/:lessonId/edit',
+    element: <ProtectedRoute level={roles.teacher}>
+      <CreateLessonPage/>
+    </ProtectedRoute>
+  },
+  {
+    path: '/courses/:courseId/lessons/:lessonId/delete',
+    element: <ProtectedRoute level={roles.teacher}>
+      <DeleteLessonPage/>
+    </ProtectedRoute>
+  }
 ];
 
 export default AppRoutes;

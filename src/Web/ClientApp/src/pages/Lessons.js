@@ -47,6 +47,8 @@ export const LessonsPage = () => {
               <ul>
                 <li>Id: {lesson.id}</li>
                 <li>Opis: {lesson.content}</li>
+                {roles[user.role.toLowerCase()] <= roles.teacher && <Link to={`/courses/${courseId}/lessons/${lesson.id}/edit`}>Edytuj</Link>}
+                {roles[user.role.toLowerCase()] <= roles.teacher && <Link to={`/courses/${courseId}/lessons/${lesson.id}/delete`}>Usuń</Link>}
               </ul>
             </li>
           )
