@@ -74,7 +74,9 @@ export const CoursesPage = () => {
                   </li>}
                 </>
               }
-              {(course.isEnrolled || roles[user.role.toLowerCase()] <= roles.teacher) && <Link to={`/courses/${course.id}`}>Przejdź do kursu</Link>}
+              {(course.isEnrolled || roles[user.role.toLowerCase()] <= roles.teacher) && <div><Link to={`/courses/${course.id}`}>Przejdź do kursu</Link></div>}
+              {roles[user.role.toLowerCase()] <= roles.teacher && <div><Link to={`/courses/${course.id}/edit`}>Edytuj kurs</Link></div>}
+              {roles[user.role.toLowerCase()] <= roles.teacher && <div><Link to={`/courses/${course.id}/delete`}>Usuń kurs</Link></div>}
             </ul>
           </li>
         ))}

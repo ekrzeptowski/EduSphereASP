@@ -1,10 +1,11 @@
 ﻿import {useAuth} from "../Auth";
 import {CoursesClient} from "../web-eduapi-client.ts";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Button, Form, Input, Label} from "reactstrap";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
 export const CreateCoursePage = () => {
+  const {courseId} = useParams();
   const {token} = useAuth();
   const navigate = useNavigate();
 
@@ -15,6 +16,20 @@ export const CreateCoursePage = () => {
     })
   });
 
+  const defaultData = async () => {
+    if (!courseId) {
+      return;
+    }
+    const course = await coursesClient.getCourse(parseInt(courseId, 10));
+    setTitle(course.title);
+    setDescription(course.description);
+  }
+
+  useEffect(() => {
+    defaultData();
+  }, []);
+
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
@@ -22,6 +37,15 @@ export const CreateCoursePage = () => {
 
   const createCourse = async () => {
     try {
+      if (courseId) {
+        await coursesClient.updateCourse(courseId, {
+          title,
+          description,
+          courseId: parseInt(courseId, 10)
+        });
+        navigate("/courses/" + courseId);
+        return;
+      }
       const result = await coursesClient.createCourse({title, description});
       if (result) {
         navigate(`/courses/${result}`, {replace: true});
@@ -32,8 +56,8 @@ export const CreateCoursePage = () => {
   }
   return (
     <div>
-      <h1>Stwórz nowy kurs</h1>
-      <p>Tutaj możesz stworzyć nowy kurs.</p>
+      <h1>{courseId ? "Edytuj" : "Stwórz nowy"} kurs</h1>
+      <p>Tutaj możesz {courseId ? "edytować" : "stworzyć nowy"} kurs.</p>
       <Form>
         <Label for="title">Tytuł:</Label>
         <Input type="text" id="title" value={title} onChange={e => {
@@ -45,7 +69,7 @@ export const CreateCoursePage = () => {
           setError(null)
           setDescription(e.target.value)
         }}/>
-        <Button className="mt-2" onClick={createCourse}>Stwórz kurs</Button>
+        <Button className="mt-2" onClick={createCourse}>{courseId ? "Zapisz" : "Stwórz"} kurs</Button>
       </Form>
       {error && <div className="alert alert-danger mt-2">{Object.keys(error).map(
         key => <div key={key}>{error[key]}</div>
