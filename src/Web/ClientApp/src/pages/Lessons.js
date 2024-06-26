@@ -47,8 +47,10 @@ export const LessonsPage = () => {
               <ul>
                 <li>Id: {lesson.id}</li>
                 <li>Opis: {lesson.content}</li>
-                {roles[user.role.toLowerCase()] <= roles.teacher && <Link to={`/courses/${courseId}/lessons/${lesson.id}/edit`}>Edytuj</Link>}
-                {roles[user.role.toLowerCase()] <= roles.teacher && <Link to={`/courses/${courseId}/lessons/${lesson.id}/delete`}>Usuń</Link>}
+                {roles[user.role.toLowerCase()] <= roles.teacher &&
+                  <div><Link to={`/courses/${courseId}/lessons/${lesson.id}/edit`}>Edytuj</Link></div>}
+                {roles[user.role.toLowerCase()] <= roles.teacher &&
+                  <div><Link to={`/courses/${courseId}/lessons/${lesson.id}/delete`}>Usuń</Link></div>}
               </ul>
             </li>
           )

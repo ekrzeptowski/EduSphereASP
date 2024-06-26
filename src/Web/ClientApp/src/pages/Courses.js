@@ -57,7 +57,7 @@ export const CoursesPage = () => {
       <Button onClick={() => setPage(page - 1)} disabled={page === 1}>Poprzednia</Button>
       <Button onClick={() => setPage(page + 1)} disabled={page === Math.ceil(courses.totalCount / 10)}>Następna</Button>
 
-      {roles[user.role.toLowerCase()] <= roles.teacher && <Link to="/courses/create">Dodaj nowy kurs</Link>}
+      {roles[user.role.toLowerCase()] <= roles.teacher && <div><Link to="/courses/create">Dodaj nowy kurs</Link></div>}
 
       <h2>Lista kursów:</h2>
       <ul>
@@ -74,9 +74,12 @@ export const CoursesPage = () => {
                   </li>}
                 </>
               }
-              {(course.isEnrolled || roles[user.role.toLowerCase()] <= roles.teacher) && <div><Link to={`/courses/${course.id}`}>Przejdź do kursu</Link></div>}
-              {roles[user.role.toLowerCase()] <= roles.teacher && <div><Link to={`/courses/${course.id}/edit`}>Edytuj kurs</Link></div>}
-              {roles[user.role.toLowerCase()] <= roles.teacher && <div><Link to={`/courses/${course.id}/delete`}>Usuń kurs</Link></div>}
+              {(course.isEnrolled || roles[user.role.toLowerCase()] <= roles.teacher) &&
+                <div><Link to={`/courses/${course.id}`}>Przejdź do kursu</Link></div>}
+              {roles[user.role.toLowerCase()] <= roles.teacher &&
+                <div><Link to={`/courses/${course.id}/edit`}>Edytuj kurs</Link></div>}
+              {roles[user.role.toLowerCase()] <= roles.teacher &&
+                <div><Link to={`/courses/${course.id}/delete`}>Usuń kurs</Link></div>}
             </ul>
           </li>
         ))}
