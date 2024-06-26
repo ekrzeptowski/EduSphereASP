@@ -10,7 +10,7 @@ Uruchom `dotnet build -tl` żeby zbudować projekt.
 ## Uruchomienie
 
 Żeby uruchomić projekt, użyj `docker-compose up` w głównym katalogu projektu lub uruchom projekt lokalnie
-używając `dotnet run` w katalogach głównego serwera i mikroserwisów `.\src\Web\`, `.\src\TodoAPI`.
+używając `dotnet run` w katalogach głównego serwera i mikroserwisów `.\src\Web\`, `.\src\AuthAPI`, `.\src\EduAPI`.
 
 ```bash
 docker-compose up
@@ -24,12 +24,12 @@ dotnet watch run
 ```
 
 ```bash
-cd .\src\Web\
+cd .\src\EduAPI\
 dotnet watch run
 ```
 
 ```bash
-cd .\src\TodoAPI\
+cd .\src\Web\
 dotnet watch run
 ```
 

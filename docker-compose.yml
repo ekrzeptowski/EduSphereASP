@@ -19,18 +19,28 @@
     build:
       context: .
       dockerfile: src/AuthAPI/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Server=mssql;Database=${DB_DATABASE};User=sa;Password=${SA_PASSWORD};MultipleActiveResultSets=true;Encrypt=false
+    volumes:
+      - ./https:/https/
+    depends_on:
+      mssql:
+        condition: service_healthy
 
-  todoapi:
-    image: todoapi
-    build:
-      context: .
-      dockerfile: src/TodoAPI/Dockerfile
-      
   eduapi:
     image: eduapi
     build:
       context: .
       dockerfile: src/EduAPI/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Server=mssql;Database=${DB_DATABASE};User=sa;Password=${SA_PASSWORD};MultipleActiveResultSets=true;Encrypt=false
+    volumes:
+      - ./https:/https/
+    depends_on:
+      mssql:
+        condition: service_healthy
 
   web:
     image: web
@@ -40,15 +50,20 @@
     environment:
       - ConnectionStrings__DefaultConnection=Server=mssql;Database=${DB_DATABASE};User=sa;Password=${SA_PASSWORD};MultipleActiveResultSets=true;Encrypt=false
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:8000
+      - ASPNETCORE_URLS=http://+:48000;https://+:48443
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=12345678
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
       - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - ReverseProxy__Clusters__auth__Destinations__destination1__Address=http://authapi:8080
+      - ReverseProxy__Clusters__EduApi__Destinations__destination1__Address=http://eduapi:8080
     ports:
-      - "8000:8000"
+      - "48000:48000"
+      - "48443:48443"
+    volumes:
+      - ./https:/https/
     depends_on:
       - authapi
-      - todoapi
-      - mssql:
-        condition: service_healthy
+      - eduapi
 
 
 volumes:
