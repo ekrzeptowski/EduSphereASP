@@ -6,14 +6,14 @@ namespace Application.IntegrationTests.Identity.Commands;
 
 using static Testing;
 
-public class RegisterRequestCommandsTests : BaseTestFixture
+public class RegisterTeacherRequestCommandsTests : BaseTestFixture
 {
     [Test]
     public async Task ShouldRegisterUser()
     {
         // Arrange
-        await RunAsDefaultUserAsync();
-        var command = new RegisterRequestCommand("student@local", "Student1234!");
+        await RunAsAdministratorAsync();
+        var command = new TeacherRegisterRequestCommand("teacher@local", "Teacher1234!");
 
         // Act
         var userId = await SendAsync(command);
@@ -28,10 +28,10 @@ public class RegisterRequestCommandsTests : BaseTestFixture
     public async Task ShouldNotRegisterUserWithDuplicateEmail()
     {
         // Arrange
-        await RunAsDefaultUserAsync();
-        await SendAsync(new RegisterRequestCommand("student@local", "Student1234!"));
+        await RunAsAdministratorAsync();
+        await SendAsync(new TeacherRegisterRequestCommand("teacher@local", "Teacher1234!"));
 
-        var command = new RegisterRequestCommand("student@local", "Student1234!");
+        var command = new TeacherRegisterRequestCommand("teacher@local", "Teacher1234!");
 
         // Act
         Func<Task<string>> act = async () => await SendAsync(command);
@@ -44,8 +44,8 @@ public class RegisterRequestCommandsTests : BaseTestFixture
     public async Task ShouldNotRegisterUserWithInvalidPassword()
     {
         // Arrange
-        await RunAsDefaultUserAsync();
-        var command = new RegisterRequestCommand("student@local", "invalid");
+        await RunAsAdministratorAsync();
+        var command = new TeacherRegisterRequestCommand("teacher@local", "invalid");
 
         // Act
         Func<Task<string>> act = async () => await SendAsync(command);

@@ -60,7 +60,7 @@ export class AuthEndpointsClient {
         return Promise.resolve<string>(null as any);
     }
 
-    register(command: RegisterRequestCommand): Promise<string> {
+    register(command: TeacherRegisterRequestCommand): Promise<string> {
         let url_ = this.baseUrl + "/api/auth/register";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -81,6 +81,46 @@ export class AuthEndpointsClient {
     }
 
     protected processRegister(response: Response): Promise<string> {
+        followIfLoginRedirect(response);
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<string>(null as any);
+    }
+
+    teacherRegister(command: TeacherRegisterRequestCommand): Promise<string> {
+        let url_ = this.baseUrl + "/api/auth/register-teacher";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processTeacherRegister(_response);
+        });
+    }
+
+    protected processTeacherRegister(response: Response): Promise<string> {
         followIfLoginRedirect(response);
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
@@ -141,11 +181,11 @@ export interface ILoginRequestCommand {
     password?: string;
 }
 
-export class RegisterRequestCommand implements IRegisterRequestCommand {
+export class TeacherRegisterRequestCommand implements ITeacherRegisterRequestCommand {
     userName?: string;
     password?: string;
 
-    constructor(data?: IRegisterRequestCommand) {
+    constructor(data?: ITeacherRegisterRequestCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -161,9 +201,9 @@ export class RegisterRequestCommand implements IRegisterRequestCommand {
         }
     }
 
-    static fromJS(data: any): RegisterRequestCommand {
+    static fromJS(data: any): TeacherRegisterRequestCommand {
         data = typeof data === 'object' ? data : {};
-        let result = new RegisterRequestCommand();
+        let result = new TeacherRegisterRequestCommand();
         result.init(data);
         return result;
     }
@@ -176,7 +216,7 @@ export class RegisterRequestCommand implements IRegisterRequestCommand {
     }
 }
 
-export interface IRegisterRequestCommand {
+export interface ITeacherRegisterRequestCommand {
     userName?: string;
     password?: string;
 }

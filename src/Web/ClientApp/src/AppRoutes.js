@@ -8,6 +8,7 @@ import {CreateCoursePage} from "./pages/CreateCourse";
 import {CreateLessonPage} from "./pages/CreateLessons";
 import {DeleteLessonPage} from "./pages/DeleteLesson";
 import {DeleteCoursePage} from "./pages/DeleteCourse";
+import {CreateTeacherPage} from "./pages/CreateTeacher";
 
 const AppRoutes = [
   {
@@ -68,6 +69,12 @@ const AppRoutes = [
     path: '/courses/:courseId/lessons/:lessonId/delete',
     element: <ProtectedRoute level={roles.teacher}>
       <DeleteLessonPage/>
+    </ProtectedRoute>
+  },
+  {
+    path: '/create-teacher',
+    element: <ProtectedRoute level={roles.admin}>
+      <CreateTeacherPage/>
     </ProtectedRoute>
   }
 ];

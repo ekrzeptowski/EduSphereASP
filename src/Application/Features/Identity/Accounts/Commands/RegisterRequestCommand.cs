@@ -1,5 +1,6 @@
 ﻿using EduSphere.Application.Common.Exceptions;
 using EduSphere.Application.Common.Interfaces;
+using EduSphere.Domain.Constants;
 
 namespace EduSphere.Application.Features.Identity.Accounts.Commands;
 
@@ -16,7 +17,7 @@ internal sealed class RegisterRequestCommandHandler : IRequestHandler<RegisterRe
 
     public async Task<string> Handle(RegisterRequestCommand request, CancellationToken cancellationToken)
     {
-        var result = await _authAccountService.Register(request.UserName, request.Password);
+        var result = await _authAccountService.Register(request.UserName, request.Password, Roles.Student);
         if (!result.Succeeded)
         {
             if (result.Errors.Any())

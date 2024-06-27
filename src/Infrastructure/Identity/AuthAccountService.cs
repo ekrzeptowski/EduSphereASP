@@ -43,22 +43,21 @@ internal class AuthAccountService : IAuthAccountService
             : (Result.Failure(new List<string> { CommonMessage.WRONG_USERNAME_PASSWORD }), token);
     }
 
-    public async Task<Result> Register(string email, string password)
+    public async Task<Result> Register(string email, string password, string role)
     {
-        // check if user already exists
-        var user = await _userManager.FindByEmailAsync(email)
-                   ?? await _userManager.FindByNameAsync(email);
-        if (user != null)
-        {
-            return (Result.Failure(new List<string> { CommonMessage.USER_ALREADY_EXISTS }));
-        }
+        var user = await _userManager.FindByEmailAsync(email) ?? await _userManager.FindByNameAsync(email);
+        if (user != null) return Result.Failure(new List<string> { CommonMessage.USER_ALREADY_EXISTS });
 
         var newUser = new ApplicationUser { UserName = email, Email = email };
-
         var result = await _userManager.CreateAsync(newUser, password);
-        return !result.Succeeded
-            ? (Result.Failure(result.ToApplicationResult().Errors))
-            : (Result.Success(newUser.Id));
+
+        if (!result.Succeeded)
+        {
+            return Result.Failure(result.ToApplicationResult().Errors);
+        }
+
+        await _userManager.AddToRoleAsync(newUser, role);
+        return Result.Success(newUser.Id);
     }
 
     public Task<(Result Result, string UserId)> ResetPassword(string email)

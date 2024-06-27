@@ -70,6 +70,8 @@ public partial class Testing
 
     public static async Task<string> RunAsUserAsync(string userName, string password, string[] roles)
     {
+        string[] defaultRoles = new[] { Roles.Student, Roles.Teacher, Roles.Administrator };
+
         using var scope = _scopeFactory.CreateScope();
 
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
@@ -78,15 +80,18 @@ public partial class Testing
 
         var result = await userManager.CreateAsync(user, password);
 
+        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+        foreach (var currentRole in defaultRoles)
+        {
+            if (!await roleManager.RoleExistsAsync(currentRole))
+            {
+                await roleManager.CreateAsync(new IdentityRole(currentRole));
+            }
+        }
+
         if (roles.Any())
         {
-            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-
-            foreach (var role in roles)
-            {
-                await roleManager.CreateAsync(new IdentityRole(role));
-            }
-
             await userManager.AddToRolesAsync(user, roles);
         }
 
