@@ -33,8 +33,22 @@ cd .\src\Web\
 dotnet watch run
 ```
 
-Aplikacja powinna być dostępna pod adresem https://localhost:5001 w przypadku docker-compose lub https://localhost:44447
+Aplikacja powinna być dostępna pod adresem https://localhost:48443 w przypadku docker-compose
+lub https://localhost:44447
 w przypadku uruchomienia lokalnego.
+
+## Funkcjonalności
+
+* Aplikacja pozwala na rejestrację, logowanie, wylogowanie.
+* Użytkownik może przeglądać kursy, zapisywać się na kursy, przeglądać lekcje zapisanych kursów.
+* Nauczyciel może dodawać kursy, dodawać lekcje do kursów, usuwać kursy, usuwać lekcje z kursów.
+* Administrator może dodawać nauczycieli.
+
+## Dane testowe użytkowników
+
+* Student: `student@localhost`, hasło: `Student1!`
+* Nauczyciel: `teacher@localhost`, hasło: `Teacher1!`
+* Administrator: `administrator@localhost`, hasło: `Administrator1!`
 
 ## Testowanie
 
@@ -46,7 +60,8 @@ dotnet test
 
 ## Swagger
 
-Aby zobaczyć dostępne endpointy, uruchom aplikację i przejdź do https://localhost:5001/api.
+Aby zobaczyć dostępne endpointy, uruchom aplikację i przejdź do https://localhost:48443/api
+lub https://localhost:44447/api.
 
 ## Autor
 
